@@ -1,6 +1,7 @@
 from autocorrect import spell
 import re
 
+
 class ngramParser(object):
 
     def __init__(self):
