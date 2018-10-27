@@ -43,17 +43,18 @@ class ngramParser(object):
             word = regex.sub('', word)
             word_emphasis = self.get_word_emphasis(word)
             word = word.lower()
+            corrected_word = spell(word)
 
-            if word in self.good_word_list or spell(word) in self.good_word_list:
+            if word in self.good_word_list or corrected_word in self.good_word_list:
                 good_words += word_emphasis
             
-            if word in self.bad_word_list or spell(word) in self.bad_word_list:
+            if word in self.bad_word_list or corrected_word in self.bad_word_list:
                 bad_words += word_emphasis
             
-            if word in self.second_person_word_list or spell(word) in self.second_person_word_list:
+            if word in self.second_person_word_list or corrected_word in self.second_person_word_list:
                 second_person_words += word_emphasis
             
-            if word in self.third_person_word_list or spell(word) in self.third_person_word_list:
+            if word in self.third_person_word_list or corrected_word in self.third_person_word_list:
                 third_person_words += word_emphasis
 
 
