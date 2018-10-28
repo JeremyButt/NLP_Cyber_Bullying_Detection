@@ -1,12 +1,11 @@
-from monkeylearn import MonkeyLearn
+from pattern3.en import sentiment
 
-def classify_sentiment(text):
-    ml = MonkeyLearn('41cf376565f33670246c5463bb7c34bf5f503969')
-    data = [text]
-    model_id = 'cl_pi3C7JiL'
-    result = ml.classifiers.classify(model_id, data)
-    if result.body[0]['classifications'][0]['tag_name'] == 'Positive':
-        return (result.body[0]['classifications'][0]['confidence'])
-    elif result.body[0]['classifications'][0]['tag_name'] == 'Negative':
-        return -(result.body[0]['classifications'][0]['confidence'])
-
+with open("../data/DataReleaseDec2011/formspring_data.csv", 'r') as data:
+    with open("../data/DataReleaseDec2011/formspring_data_sentiments.csv", 'w+') as sentiments:
+        for line in data.readlines():
+            if not line.isspace():
+                values = line.split(',')
+                values[1] = values[1].replace('\n', '')
+                print(values[0])
+                sentiment_value = sentiment(values[0])
+                sentiments.write(values[0] + ',' + values[1] + ',' + str(sentiment_value[0]) + ',' + str(sentiment_value[1]) + '\n\n')
