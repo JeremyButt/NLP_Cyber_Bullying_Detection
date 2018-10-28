@@ -1,5 +1,6 @@
 from autocorrect import spell
 import re
+from spellcheck import spellcheck
 
 
 class ngramParser(object):
@@ -37,18 +38,18 @@ class ngramParser(object):
         third_person_words = 0
 
         words = text.split()
-        numWords = len(words)
+        numWords = len(words) if len(words) != 0 else 1
         regex = re.compile('[^a-zA-Z]')
 
         for word in words:
             
-            if len(word) > 20:
+            if len(word) > 15:
                 continue
 
             word = regex.sub('', word)
             word_emphasis = self.get_word_emphasis(word)
             word = word.lower()
-            corrected_word = spell(word)
+            corrected_word = spellcheck(word)
 
             if word in self.good_word_list or corrected_word in self.good_word_list:
                 good_words += word_emphasis
@@ -64,10 +65,10 @@ class ngramParser(object):
 
 
         return  {
-                 "Good"             : good_words / numWords, 
-                 "Bad"              : bad_words / numWords, 
-                # "Second-Person"    : second_person_words / numWords, 
-                # "Third-person "    : third_person_words / numWords
+                 "Good"             : good_words            / numWords, 
+                 "Bad"              : bad_words             / numWords, 
+                 "Second-Person"    : second_person_words   / numWords, 
+                 "Third-person "    : third_person_words    / numWords
                 }
 
 
