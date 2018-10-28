@@ -40,6 +40,9 @@ class ngramParser(object):
         regex = re.compile('[^a-zA-Z]')
 
         for word in words:
+            
+            if len(word) > 20:
+                continue
 
             word = regex.sub('', word)
             word_emphasis = self.get_word_emphasis(word)
@@ -69,5 +72,5 @@ class ngramParser(object):
 
 if __name__ == "__main__":
     parser = ngramParser()
-    print(parser.get_ngrams("You, are a MOTHEFUCKER."))
+    print(parser.get_ngrams("Your a bitch"))
     print(parser.get_ngrams("You, are a nice MOTHEFUCKER."))
