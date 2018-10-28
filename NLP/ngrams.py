@@ -26,9 +26,9 @@ class ngramParser(object):
 
     def get_word_emphasis(self, word):
         if word.isupper():
-            return 2
+            return 2.0
         else:
-            return 1
+            return 1.0
 
     def get_ngrams(self, text):
         good_words = 0 
@@ -37,6 +37,7 @@ class ngramParser(object):
         third_person_words = 0
 
         words = text.split()
+        numWords = len(words)
         regex = re.compile('[^a-zA-Z]')
 
         for word in words:
@@ -63,10 +64,10 @@ class ngramParser(object):
 
 
         return  {
-                 "Good": good_words, 
-                 "Bad": bad_words, 
-                 "Second-Person": second_person_words, 
-                 "Third-person": third_person_words
+                 "Good"             : good_words / numWords, 
+                 "Bad"              : bad_words / numWords, 
+                # "Second-Person"    : second_person_words / numWords, 
+                # "Third-person "    : third_person_words / numWords
                 }
 
 
