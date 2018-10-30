@@ -1,13 +1,14 @@
 import re
 from spellcheck import spellcheck
+from pattern3.en import lexeme
 
 class ngramParser(object):
 
     def __init__(self):
-        self.good_word_list = []
-        self.bad_word_list = []
-        self.second_person_word_list = []
-        self.third_person_word_list = []
+        self.good_word_list = set()
+        self.bad_word_list = set()
+        self.second_person_word_list = set()
+        self.third_person_word_list = set()
         self.get_word_lists()
         self.regex = re.compile('[^a-zA-Z]')
         self.lookalikes = {
@@ -85,16 +86,22 @@ class ngramParser(object):
             word = word.lower()
             corrected_word = spellcheck(word)
 
-            if word in self.good_word_list or corrected_word in self.good_word_list:
+            possible_words = set()
+            possible_words.add(word)
+            possible_words.add(corrected_word)
+            for lex in lexeme(corrected_word):
+                possible_words.add(lex)
+
+            if len(possible_words.intersection(self.good_word_list)) > 0:
                 good_words += word_emphasis
             
-            if word in self.bad_word_list or corrected_word in self.bad_word_list:
+            if len(possible_words.intersection(self.bad_word_list)) > 0:
                 bad_words += word_emphasis
             
-            if word in self.second_person_word_list or corrected_word in self.second_person_word_list:
+            if len(possible_words.intersection(self.second_person_word_list)) > 0:
                 second_person_words += word_emphasis
             
-            if word in self.third_person_word_list or corrected_word in self.third_person_word_list:
+            if len(possible_words.intersection(self.third_person_word_list)) > 0:
                 third_person_words += word_emphasis
 
 
