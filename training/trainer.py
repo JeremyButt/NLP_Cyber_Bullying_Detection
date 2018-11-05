@@ -2,6 +2,7 @@ import sys
 
 from sklearn import svm
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.externals import joblib
 import pandas as pd
 import numpy as np
 
@@ -113,6 +114,26 @@ class Trainer(object):
         print('PRECISION: {0}'.format(str(self.tp_count/(self.tp_count + self.fp_count))))
         print('RECALL: {0}'.format(str(self.tp_count/(self.tp_count + self.fn_count))))
 
+    def save_model(self, file_name='./models/default_model.joblib'):
+        """
+        Export model to a joblib file
+        :param file_name: model file path (always store in .models)
+        :return:
+        """
+        open(file_name, 'w+').close()
+        joblib.dump(self.clf, file_name)
+
+    def load_model(self, file_name='./models/default_model.joblib'):
+        """
+        Import a model file into the clf
+        :param file_name: model file path
+        :return:
+        """
+        try:
+            self.clf = joblib.load(file_name)
+        except FileNotFoundError:
+            print('Not a valid model file!')
+
     @staticmethod
     def __get_training_and_testing_data(data_set=pd.DataFrame, train_to_test_ratio=DEFAULT_TRAIN_TO_TEST_RATIO,
                                         split_column='', verbose=DEFAULT_VERBOSE):
@@ -160,6 +181,15 @@ if __name__ == '__main__':
     trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.80,
                  feature_source='text', label_source='label', verbose=True)
 
-    trainer.train()
-    trainer.test()
+    trainer.train(verbose=True)
+    trainer.test(verbose=True)
+    trainer.display_results()
+    trainer.save_model('../models/demo_model.joblib')
+
+    del trainer
+    trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.1,
+                 feature_source='text', label_source='label', verbose=True)
+    trainer.load_model('../models/demo_model.joblib')
+    trainer.test(verbose=True)
+
     trainer.display_results()
