@@ -35,21 +35,28 @@ class Trainer(object):
             print('IMPORTING DATA VIA PANDAS READ CSV')
         data_set = pd.read_csv(data_filepath)
 
-        if verbose:
-            print('STRATIFIED SPLITING TRAINING AND TEST DATA')
-        train_data, test_data = self.__get_training_and_testing_data(data_set=data_set,
-                                                                     train_to_test_ratio=train_to_test_ratio,
-                                                                     split_column='label',
-                                                                     verbose=verbose)
+        if train_to_test_ratio > 0:
+            if verbose:
+                print('STRATIFIED SPLITING TRAINING AND TEST DATA')
+                train_data, test_data = self.__get_training_and_testing_data(data_set=data_set,
+                                                                             train_to_test_ratio=train_to_test_ratio,
+                                                                             split_column='label',
+                                                                             verbose=verbose)
 
-        if verbose:
-            print('GETTING FEATURE VECTORS VIA FEATURE VECTOR GENERATOR')
-            print('\tTRAINING DATA')
-        self.training_data_feature_vectors, self.training_data_feature_labels = self.__get_data_set_features(data_set=train_data, feature_source=feature_source, label_source=label_source, verbose=verbose)
+            if verbose:
+                print('GETTING FEATURE VECTORS VIA FEATURE VECTOR GENERATOR')
+                print('\tTRAINING DATA')
+            self.training_data_feature_vectors, self.training_data_feature_labels = self.__get_data_set_features(data_set=train_data, feature_source=feature_source, label_source=label_source, verbose=verbose)
 
-        if verbose:
-            print('\tTESTING DATA')
-        self.testing_data_feature_vectors, self.testing_data_feature_labels = self.__get_data_set_features(data_set=test_data, feature_source=feature_source, label_source=label_source, verbose=verbose)
+            if verbose:
+                print('\tTESTING DATA')
+            self.testing_data_feature_vectors, self.testing_data_feature_labels = self.__get_data_set_features(data_set=test_data, feature_source=feature_source, label_source=label_source, verbose=verbose)
+
+        else:
+            if verbose:
+                print('GETTING FEATURE VECTORS VIA FEATURE VECTOR GENERATOR')
+                print('\tTESTING DATA')
+            self.testing_data_feature_vectors, self.testing_data_feature_labels = self.__get_data_set_features(data_set=data_set, feature_source=feature_source, label_source=label_source, verbose=verbose)
 
         self.clf = clf
 
@@ -187,7 +194,7 @@ if __name__ == '__main__':
     trainer.save_model('../models/demo_model.joblib')
 
     del trainer
-    trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.1,
+    trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.0,
                  feature_source='text', label_source='label', verbose=True)
     trainer.load_model('../models/demo_model.joblib')
     trainer.test(verbose=True)
