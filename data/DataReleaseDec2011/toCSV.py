@@ -21,7 +21,7 @@ for formspringid in root.findall('FORMSPRINGID'):
 
         bullying_severity = 0
         for label in post.findall('LABELDATA'):
-            bullying_severity += int(label.find('SEVERITY').text if label.find('SEVERITY').text is not None and label.find('SEVERITY').text != 'n/a0' and label.find('SEVERITY').text != 'n/a' and label.find('SEVERITY').text != 'o' and label.find('SEVERITY').text != '0`' and label.find('SEVERITY').text != '`0' and label.find('SEVERITY').text != 'N/a' else 0)
+            bullying_severity += int(label.find('SEVERITY').text if label.find('SEVERITY').text is not None and label.find('SEVERITY').text.isdigit() else 0)
 
         if text != '' and text is not None:
             row = [html.unescape(text.encode('ascii', 'ignore').decode()).replace('<br>', ''), (bullying_severity/3 > severity_threshold)]
