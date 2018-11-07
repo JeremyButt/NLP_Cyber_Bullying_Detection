@@ -5,10 +5,13 @@ import csv
 tree = ET.parse("XMLMergedFile.xml")
 root = tree.getroot()
 
-formspring_data_csv = open('formspring_data.csv', 'w')
+# SET THIS THRESHOLD
+severity_threshold = 2.5
+
+formspring_data_csv = open('formspring_data_severity_gt{0}.csv'.format(str(severity_threshold).replace('.', '_')), 'w')
 
 csvwriter = csv.writer(formspring_data_csv)
-head = ['text','label']
+head = ['text', 'label']
 csvwriter.writerow(head)
 
 for formspringid in root.findall('FORMSPRINGID'):
@@ -16,25 +19,12 @@ for formspringid in root.findall('FORMSPRINGID'):
 
         text = post.find('TEXT').text
 
-        question = text.split('A:')[0].replace('Q:', '')
-        answer = text.split('A:')[1]
+        bullying_severity = 0
+        for label in post.findall('LABELDATA'):
+            bullying_severity += int(label.find('SEVERITY').text if label.find('SEVERITY').text is not None and label.find('SEVERITY').text.isdigit() else 0)
 
-        is_cyber_bullying_question = False
-        is_cyber_bullying_answer = False
-        for cyber_bullying_check in post.findall('LABELDATA'):
-            cyber_bullying_check_answer = cyber_bullying_check.find('ANSWER').text
-            cyber_bullying_word = cyber_bullying_check.find('CYBERBULLYWORD').text if cyber_bullying_check.find('CYBERBULLYWORD').text != None else ''
-
-            if cyber_bullying_check_answer == 'Yes' and cyber_bullying_word in question:
-                is_cyber_bullying_question = True
-            if cyber_bullying_check_answer == 'Yes' and cyber_bullying_word in answer:
-                is_cyber_bullying_answer = True
-
-        if question != '' and question is not None:
-            question_row = [html.unescape(question.encode('ascii', 'ignore').decode()).replace('<br>', ''), is_cyber_bullying_question]
-            csvwriter.writerow(question_row)
-        if answer != '' and answer is not None:
-            answer_row = [html.unescape(answer.encode('ascii', 'ignore').decode()).replace('<br>', ''), is_cyber_bullying_answer]
-            csvwriter.writerow(answer_row)
+        if text != '' and text is not None:
+            row = [html.unescape(text.encode('ascii', 'ignore').decode()).replace('<br>', ''), (bullying_severity/3 > severity_threshold)]
+            csvwriter.writerow(row)
 
 formspring_data_csv.close()
