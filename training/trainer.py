@@ -118,8 +118,10 @@ class Trainer(object):
         print('\n')
 
         print('STATISTICS')
-        print('PRECISION: {0}'.format(str(self.tp_count/(self.tp_count + self.fp_count))))
-        print('RECALL: {0}'.format(str(self.tp_count/(self.tp_count + self.fn_count))))
+        precision = self.tp_count/(self.tp_count + self.fp_count) if (self.tp_count + self.fp_count) != 0 else 0
+        recall = self.tp_count/(self.tp_count + self.fn_count) if (self.tp_count + self.fn_count) != 0 else 0
+        print('PRECISION: {0}'.format(str(precision)))
+        print('RECALL: {0}'.format(str(recall)))
 
     def save_model(self, file_name='./models/default_model.joblib'):
         """
