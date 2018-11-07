@@ -1,5 +1,6 @@
 from autocorrect import spell
-from spellingCache import cache
+from NLP.spellingCache import cache
+
 
 def spellcheck(word):
     if word in cache:

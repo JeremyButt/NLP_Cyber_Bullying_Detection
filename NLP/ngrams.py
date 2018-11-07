@@ -1,6 +1,7 @@
 import re
-from spellcheck import spellcheck
+from NLP.spellcheck import spellcheck
 from pattern3.en import lexeme
+
 
 class ngramParser(object):
 
