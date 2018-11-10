@@ -182,6 +182,7 @@ class Trainer(object):
             features.append(feature_vector_generator.getFeatureVector(row[feature_source]))
             i += 1
         print('\n')
+        feature_vector_generator.cache()
         return np.array(features).astype(float), labels
 
 
