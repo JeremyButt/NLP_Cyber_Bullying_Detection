@@ -2,6 +2,7 @@ import re
 
 from NLP.spellcheck import spellcheck, exportCache
 
+
 class WordGuess(object):
 
     def __init__(self):
