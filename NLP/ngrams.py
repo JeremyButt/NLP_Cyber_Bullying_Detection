@@ -1,7 +1,6 @@
 import re
 from NLP.spellcheck import spellcheck
-from pattern3.en import lexeme
-
+from pattern3.en import lemma
 
 class ngramParser(object):
 
@@ -20,6 +19,8 @@ class ngramParser(object):
             "5" : "S",
             "3" : "E",
             "1" : "L",
+            "(" : "C",
+            "+" : "T",
         }
 
     def get_word_lists(self):
@@ -83,21 +84,19 @@ class ngramParser(object):
 
             word = self.replaceLetterLookalikes(word)
             word = self.regex.sub('', word)
-            word_emphasis = self.get_word_emphasis(word)
+            word_emphasis = self.get_word_emphasis(word) 
             word = word.lower()
-            corrected_word = spellcheck(word)
+            corrected_word = spellcheck(word).lower()
 
             possible_words = set()
             possible_words.add(word)
             possible_words.add(corrected_word)
-            for lex in lexeme(corrected_word):
-                possible_words.add(lex)
-
-            if len(possible_words.intersection(self.good_word_list)) > 0:
-                good_words += word_emphasis
             
             if len(possible_words.intersection(self.bad_word_list)) > 0:
                 bad_words += word_emphasis
+
+            if len(possible_words.intersection(self.good_word_list)) > 0:
+                good_words += word_emphasis
             
             if len(possible_words.intersection(self.second_person_word_list)) > 0:
                 second_person_words += word_emphasis
