@@ -6,6 +6,7 @@ from NLP.spellcheck import exportCache
 from NLP.sentenceParser import SentenceParser
 from NLP.tfidf import TFIDF
 
+
 class FeatureVectorGenerator(object):
 
     def __init__(self):
