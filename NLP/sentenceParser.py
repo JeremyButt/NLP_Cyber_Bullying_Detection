@@ -10,7 +10,7 @@ class SentenceParser(object):
         self.nlp = spacy.load('en_core_web_sm')
         self.second_person_word_list = []
         self.ngram_parser = ngramParser()
-        with open("./data/second_person_pronoun.dict", 'r') as file:
+        with open("../data/second_person_pronoun.dict", 'r') as file:
             self.second_person_word_list = file.read().replace('\n', ' ').split()
     
     def parseSentences(self, text):

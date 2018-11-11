@@ -188,7 +188,7 @@ class Trainer(object):
 
 # DEMO CODE
 if __name__ == '__main__':
-    trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.80,
+    trainer = Trainer(clf=svm.SVC(), data_filepath='./data/DataReleaseDec2011/formspring_data_severity_gt2_5.csv', train_to_test_ratio=0.80,
                  feature_source='text', label_source='label', verbose=True)
 
     trainer.train(verbose=True)
@@ -197,7 +197,7 @@ if __name__ == '__main__':
     trainer.save_model('../models/demo_model.joblib')
 
     del trainer
-    trainer = Trainer(clf=svm.LinearSVC(), data_filepath='../data/DataReleaseDec2011/formspring_data.csv', train_to_test_ratio=0.0,
+    trainer = Trainer(clf=svm.SVC(), data_filepath='./data/DataReleaseDec2011/formspring_data_severity_gt2_5.csv', train_to_test_ratio=0.0,
                  feature_source='text', label_source='label', verbose=True)
     trainer.load_model('../models/demo_model.joblib')
     trainer.test(verbose=True)
