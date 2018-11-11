@@ -1,6 +1,6 @@
 import re
 
-from spellcheck import spellcheck, exportCache
+from NLP.spellcheck import spellcheck, exportCache
 
 class WordGuess(object):
 

@@ -1,6 +1,6 @@
 import re
 from NLP.spellcheck import spellcheck
-from pattern3.en import lemma
+
 
 class ngramParser(object):
 

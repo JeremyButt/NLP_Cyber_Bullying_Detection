@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request, jsonify, abort
-from predictor import predict
+from sklearn import svm
+
+from webapp.predictor import Predictor
+
 
 app = Flask(__name__)
+
+predictor = Predictor(svm.LinearSVC(), '../models/demo_model_tfidf1.joblib')
 
 
 @app.route('/')
@@ -13,10 +18,10 @@ def home():
 def get_sentence_result():
     text = request.form['text']
     if text:
-        bullying = predict(text)
+        bullying = predictor.predict(text)
     else:
         abort(500)
-    return jsonify(result=text.upper(), bullying=bullying)
+    return jsonify(result=text.upper(), bullying=bool(bullying))
 
 
 if __name__ == '__main__':
