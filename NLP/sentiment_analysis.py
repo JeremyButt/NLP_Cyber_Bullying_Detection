@@ -1,6 +1,9 @@
 from pattern3.en import sentiment
 
 def saveSentiments():
+    """
+    Caches sentiment analysis scores. Speeds up training.
+    """
     with open("../data/DataReleaseDec2011/formspring_data.csv", 'r') as data:
         with open("../data/DataReleaseDec2011/formspring_data_sentiments.csv", 'w+') as sentiments:
             for line in data.readlines():
