@@ -14,6 +14,7 @@ pandas = "*"
 matplotlib = "*"
 jellyfish = "*"
 "pattern3" = "*"
+spacy = "*"
 
 [dev-packages]
 
