@@ -5,6 +5,11 @@ from NLP.sentenceCache import cache
 
 
 class SentenceParser(object):
+    """
+    Get word-frequency-based bullying scores for each sentence in 
+    a message. Helps filter out cases where harsh languages is directed
+    at something (or someone)  other than the receiver. 
+    """
     
     def __init__(self):
         self.nlp = spacy.load('en_core_web_sm')
@@ -14,10 +19,14 @@ class SentenceParser(object):
             self.second_person_word_list = file.read().replace('\n', ' ').split()
     
     def parseSentences(self, text):
+        """
+        Parse message sentence-by-sentence.
+        """
         if text.replace('"', '') in cache:
             return cache[text.replace('"', '')]
 
         tokens = self.nlp(text)
+        # Split message into sentences
         sentences = tokens.sents
         numSentences = 0
         score = 0
@@ -34,6 +43,9 @@ class SentenceParser(object):
         return score
 
     def cacheScores(self):
+        """
+        Cache the scores. Speeds up training.
+        """
         with open("./NLP/sentenceCache.py", 'w+') as f:
             f.truncate()
             f.write("cache = {\n")
